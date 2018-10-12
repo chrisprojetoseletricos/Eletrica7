@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="EletricaPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>br.aplicacao.eletrica.entidades.Projeto</class>
+    <class>br.aplicacao.eletrica.entidades.Fonte</class>
+    <class>br.aplicacao.eletrica.entidades.Quadro</class>
+    <class>br.aplicacao.eletrica.entidades.Concessionaria</class>
+    <class>br.aplicacao.eletrica.entidades.Circuito</class>
+    <class>br.aplicacao.eletrica.entidades.Equipamento</class>
+    <class>br.aplicacao.eletrica.entidades.Condutor</class>
+    <class>br.aplicacao.eletrica.entidades.Curto</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/NetBeansProjects/Eletrica7/Banco de dados/Eletrica"/>
+      <property name="javax.persistence.jdbc.user" value="sa"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.format_sql" value="true"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+    </properties>
+  </persistence-unit>
+</persistence>

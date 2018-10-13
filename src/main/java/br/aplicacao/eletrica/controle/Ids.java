@@ -17,6 +17,7 @@ public class Ids {
     public static Integer idEquipamento = 0;
     public static Integer idCondutor = 0;
     public static Integer idCurto = 0;
+    public static Integer idConcessionaria = 0;
     
     public static void imprimiIds(){
         System.out.println("idProjeto: "+ idProjeto);
@@ -26,5 +27,6 @@ public class Ids {
         System.out.println("idEquipamento: "+ idEquipamento);
         System.out.println("idCondutor: "+ idCondutor);
         System.out.println("idCurto: "+ idCurto);
+        System.out.println("idConcessionaria: "+ idConcessionaria);
     }
 }

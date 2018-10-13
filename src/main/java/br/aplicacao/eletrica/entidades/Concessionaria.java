@@ -5,6 +5,12 @@
  */
 package br.aplicacao.eletrica.entidades;
 
+import br.aplicacao.eletrica.enums.BitolasMili;
+import br.aplicacao.eletrica.enums.DiametroPolegadas;
+import br.aplicacao.eletrica.enums.DisjuntorTermoMag;
+import br.aplicacao.eletrica.enums.MetodoCalculo;
+import br.aplicacao.eletrica.enums.TiposCondutores;
+import br.aplicacao.eletrica.enums.TiposFornecimento;
 import br.aplicacao.eletrica.servico.tableModel.TableModel;
 import java.io.Serializable;
 import javax.persistence.Entity;
@@ -27,6 +33,105 @@ public class Concessionaria implements Serializable, Entidade<Concessionaria> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String nome;
+    private String localizacao;
+    private double tensaoFN;
+    private MetodoCalculo metodoCalculo;
+    private TiposFornecimento tiposFornecimento;
+    private String carga;
+    private DisjuntorTermoMag disjuntorTermoMag;
+    private TiposCondutores tipoCondutor;
+    private BitolasMili faseMinimaCobreIsolado;
+    private BitolasMili neutroMinimoCobreIsolado;
+    private DiametroPolegadas diametroEletroAcoGalva;
+    private DiametroPolegadas diametroEletroAterramento;
+
+    public String getLocalizacao() {
+        return localizacao;
+    }
+
+    public void setLocalizacao(String localizacao) {
+        this.localizacao = localizacao;
+    }
+
+    public double getTensaoFN() {
+        return tensaoFN;
+    }
+
+    public void setTensaoFN(double tensaoFN) {
+        this.tensaoFN = tensaoFN;
+    }
+
+    public MetodoCalculo getMetodoCalculo() {
+        return metodoCalculo;
+    }
+
+    public void setMetodoCalculo(MetodoCalculo metodoCalculo) {
+        this.metodoCalculo = metodoCalculo;
+    }
+
+    public TiposFornecimento getTiposFornecimento() {
+        return tiposFornecimento;
+    }
+
+    public void setTiposFornecimento(TiposFornecimento tiposFornecimento) {
+        this.tiposFornecimento = tiposFornecimento;
+    }
+
+    public String getCarga() {
+        return carga;
+    }
+
+    public void setCarga(String carga) {
+        this.carga = carga;
+    }
+
+    public DisjuntorTermoMag getDisjuntorTermoMag() {
+        return disjuntorTermoMag;
+    }
+
+    public void setDisjuntorTermoMag(DisjuntorTermoMag disjuntorTermoMag) {
+        this.disjuntorTermoMag = disjuntorTermoMag;
+    }
+
+    public TiposCondutores getTipoCondutor() {
+        return tipoCondutor;
+    }
+
+    public void setTipoCondutor(TiposCondutores tipoCondutor) {
+        this.tipoCondutor = tipoCondutor;
+    }
+
+    public BitolasMili getFaseMinimaCobreIsolado() {
+        return faseMinimaCobreIsolado;
+    }
+
+    public void setFaseMinimaCobreIsolado(BitolasMili faseMinimaCobreIsolado) {
+        this.faseMinimaCobreIsolado = faseMinimaCobreIsolado;
+    }
+
+    public BitolasMili getNeutroMinimoCobreIsolado() {
+        return neutroMinimoCobreIsolado;
+    }
+
+    public void setNeutroMinimoCobreIsolado(BitolasMili neutroMinimoCobreIsolado) {
+        this.neutroMinimoCobreIsolado = neutroMinimoCobreIsolado;
+    }
+
+    public DiametroPolegadas getDiametroEletroAcoGalva() {
+        return diametroEletroAcoGalva;
+    }
+
+    public void setDiametroEletroAcoGalva(DiametroPolegadas diametroEletroAcoGalva) {
+        this.diametroEletroAcoGalva = diametroEletroAcoGalva;
+    }
+
+    public DiametroPolegadas getDiametroEletroAterramento() {
+        return diametroEletroAterramento;
+    }
+
+    public void setDiametroEletroAterramento(DiametroPolegadas diametroEletroAterramento) {
+        this.diametroEletroAterramento = diametroEletroAterramento;
+    }
 
     public Integer getId() {
         return id;

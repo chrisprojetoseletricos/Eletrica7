@@ -22,43 +22,81 @@ FROM
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch"/>
+		<band height="99" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="99" uuid="ecf95f3a-eb93-4846-9c63-383a8fad52c6"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="208" y="0" width="347" height="99" uuid="b118fa37-ea0f-433d-8585-50df47e20c2a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="40" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relatório]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="208" height="99" uuid="eb0910d2-1b47-4c50-a604-33b08dbb9efd"/>
+				<imageExpression><![CDATA["/home/chris/NetBeansProjects/Eletrica7/src/main/resources/imagens/logotipo.png"]]></imageExpression>
+			</image>
+		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch"/>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="153" height="35" uuid="24bd153b-6b82-4eda-89ef-5a292f176202"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Todos os Projetos]]></text>
+			</staticText>
+		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="21" splitType="Stretch">
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="20" uuid="0a9799af-285e-444e-b613-cbb96afe14d8"/>
+			</rectangle>
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="20" uuid="9bbb2be1-1e8e-48e1-9518-a8440a79c3a8"/>
+				<reportElement x="10" y="0" width="90" height="20" uuid="9bbb2be1-1e8e-48e1-9518-a8440a79c3a8"/>
+				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Nome:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="135" y="0" width="100" height="20" uuid="513ab43e-5b08-44f2-9c89-a45c0769ba15"/>
+				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Data:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="235" y="0" width="100" height="20" uuid="b9dc3c8a-891e-4316-8df8-e191a31f5120"/>
+				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Descrição:]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="44" splitType="Stretch">
+		<band height="43" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="20" uuid="ae452f5c-6380-4f9b-b576-5d0d55c77f51"/>
+				<reportElement x="10" y="0" width="115" height="40" uuid="ae452f5c-6380-4f9b-b576-5d0d55c77f51"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{PROJETO_NOME}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="135" y="0" width="63" height="20" uuid="0860ad3e-301b-4752-b5bd-ead9312f5517"/>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="135" y="0" width="100" height="40" uuid="0860ad3e-301b-4752-b5bd-ead9312f5517"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{PROJETO_DATAPROJETO}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement x="235" y="0" width="320" height="40" uuid="d07743f2-8ac3-4283-be95-0a45fdf87df5"/>
+				<reportElement x="235" y="0" width="309" height="40" uuid="d07743f2-8ac3-4283-be95-0a45fdf87df5"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{PROJETO_DESCRICAO}.getSubString( 1l, ( new Long( $F{PROJETO_DESCRICAO}.length() ) ).intValue() )]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="40" width="555" height="1" uuid="3abee9ae-4658-4e7b-b0f1-777507007963"/>
+				<reportElement x="0" y="42" width="555" height="1" uuid="74330497-9493-4919-b3ee-ada2d8c035aa"/>
+			</line>
+			<line>
+				<reportElement x="555" y="0" width="1" height="43" uuid="9398141d-451e-429e-8f2d-59488558fd6c"/>
+			</line>
+			<line>
+				<reportElement x="-1" y="0" width="1" height="43" uuid="32fd3535-7440-4b64-9757-bcef493f5edd"/>
 			</line>
 		</band>
 	</detail>

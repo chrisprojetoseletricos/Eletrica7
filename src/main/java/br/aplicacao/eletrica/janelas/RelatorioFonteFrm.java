@@ -16,12 +16,12 @@ import net.sf.jasperreports.engine.JRException;
  *
  * @author chris
  */
-public class RelatorioFrm extends javax.swing.JInternalFrame {
+public class RelatorioFonteFrm extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form ProjetoFrm
      */
-    public RelatorioFrm() {
+    public RelatorioFonteFrm() {
         initComponents();
 
     }
@@ -43,7 +43,7 @@ public class RelatorioFrm extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Circuito");
+        setTitle("Projeto");
         setName("ProjetoFrm"); // NOI18N
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -55,7 +55,7 @@ public class RelatorioFrm extends javax.swing.JInternalFrame {
         painelEsquerdo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Relatórios", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 204))); // NOI18N
         painelEsquerdo.setPreferredSize(new java.awt.Dimension(50, 100));
 
-        jButton1.setText("Teste");
+        jButton1.setText("Todos");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -69,7 +69,7 @@ public class RelatorioFrm extends javax.swing.JInternalFrame {
             .addGroup(painelEsquerdoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1)
-                .addContainerGap(484, Short.MAX_VALUE))
+                .addContainerGap(481, Short.MAX_VALUE))
         );
         painelEsquerdoLayout.setVerticalGroup(
             painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,7 +111,6 @@ public class RelatorioFrm extends javax.swing.JInternalFrame {
         Map parametros = new HashMap();
 
         try {
-
             // abre o relatório
             ReportUtils.openReport("Projetos", inputStream, parametros,
                     ConnectionFactory.getConnection());

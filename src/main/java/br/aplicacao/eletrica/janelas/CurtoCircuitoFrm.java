@@ -20,6 +20,8 @@ import java.awt.event.KeyListener;
  */
 public class CurtoCircuitoFrm extends javax.swing.JDialog implements KeyListener {
 
+    private static final long serialVersionUID = 1L;
+
     private Curto curto;
 
     /**
@@ -193,12 +195,12 @@ public class CurtoCircuitoFrm extends javax.swing.JDialog implements KeyListener
 
     private Curto getDados() {
 
-        if (Ids.idCurto > 0) {
-            curto = CurtoService.getById(Ids.idCurto);
+        if (Ids.getIdCurto() > 0) {
+            curto = CurtoService.getById(Ids.getIdCurto());
         } else {
             curto = new Curto();
         }
-        this.curto.setId(TrataID.IntegerToInteger(Ids.idCurto));
+        this.curto.setId(TrataID.IntegerToInteger(Ids.getIdCurto()));
         this.curto.setCorrenteCurto(Numero.stringToDouble(campoCorrenteCurto.getText(), 1));
         this.curto.setTempAdmissRegime(Numero.stringToDouble(campoTempoAdimiss.getText(), 1));
         this.curto.setTempoElimDef(Numero.stringToDouble(campoTempoEliminacao.getText(), 1));
@@ -208,7 +210,7 @@ public class CurtoCircuitoFrm extends javax.swing.JDialog implements KeyListener
 
     public Curto setDados(Curto curto) {
         if (curto != null) {
-            Ids.idCurto = curto.getId();
+            Ids.setIdCurto(curto.getId());
             campoCorrenteCurto.setText(Numero.decimal(curto.getCorrenteCurto(), "##.##"));
             campoTempoAdimiss.setText(Numero.decimal(curto.getTempAdmissRegime(), "##.##"));
             campoTempoEliminacao.setText(Numero.decimal(curto.getTempoElimDef(), "##.##"));

@@ -5,6 +5,7 @@
  */
 package br.aplicacao.eletrica.janelas;
 
+import br.aplicacao.eletrica.controle.DesktopPane;
 import br.aplicacao.eletrica.controle.Ids;
 import br.aplicacao.eletrica.entidades.Equipamento;
 import br.aplicacao.eletrica.enums.Ligacao;
@@ -32,6 +33,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyListener {
 
+    private static final long serialVersionUID = 1L;
+
     private GenericTableModel tabelaModelo;
     private CondutorFrm condutorFrm;
     private CurtoCircuitoFrm curtoFrm;
@@ -47,6 +50,7 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
         this.cbUsabilidadeItens();
         this.cbUnidadeItens();
         this.cbLigacaoItens();
+        Ids.setIdEquipamento((Integer) 0);
     }
 
     /**
@@ -62,6 +66,7 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
         btnSalvar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnCopiar = new javax.swing.JButton();
+        btnNovo = new javax.swing.JButton();
         scrollEsquerdo = new javax.swing.JScrollPane();
         painelEsquerdo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -103,6 +108,23 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
         setResizable(true);
         setTitle("Equipamento");
         setName("ProjetoFrm"); // NOI18N
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         btnSalvar.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
         btnSalvar.setText("Salvar");
@@ -144,27 +166,44 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
             }
         });
 
+        btnNovo.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        btnNovo.setText("Novo");
+        btnNovo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnNovo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnNovo.setIconTextGap(2);
+        btnNovo.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        btnNovo.setMaximumSize(new java.awt.Dimension(71, 32));
+        btnNovo.setMinimumSize(new java.awt.Dimension(71, 32));
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelBotoesLayout = new javax.swing.GroupLayout(painelBotoes);
         painelBotoes.setLayout(painelBotoesLayout);
         painelBotoesLayout.setHorizontalGroup(
             painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelBotoesLayout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnExcluir)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(524, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         painelBotoesLayout.setVerticalGroup(
             painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelBotoesLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(14, Short.MAX_VALUE)
                 .addGroup(painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir)
-                    .addComponent(btnCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         scrollEsquerdo.setBorder(null);
@@ -220,7 +259,7 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
         jLabel14.setText("Tensão F-N (V):");
 
         campoTensao.setEditable(false);
-        campoTensao.setText(Numero.decimal(FonteService.getById(Ids.idFonte).getTensaoFN(),"##.##"));
+        campoTensao.setText(Numero.decimal(FonteService.getById(Ids.getIdFonte()).getTensaoFN(),"##.##"));
 
         javax.swing.GroupLayout painelEsquerdoLayout = new javax.swing.GroupLayout(painelEsquerdo);
         painelEsquerdo.setLayout(painelEsquerdoLayout);
@@ -373,7 +412,7 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
         painelDireito.setLayout(painelDireitoLayout);
         painelDireitoLayout.setHorizontalGroup(
             painelDireitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollDireito, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(scrollDireito, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
         );
         painelDireitoLayout.setVerticalGroup(
             painelDireitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -415,21 +454,33 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        EquipamentoService.removeById(Ids.idEquipamento);
+        EquipamentoService.removeById(Ids.getIdEquipamento());
         this.iniciaTabelaEquipamentos();
         this.apagaDadosFrm();
-        Ids.idEquipamento = 0;
+        Ids.setIdEquipamento((Integer) 0);
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnCopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarActionPerformed
-       Ids.imprimiIds();
-        Equipamento q = EquipamentoService.getById(Ids.idEquipamento).clonarSemID();
+        Equipamento q = EquipamentoService.getById(Ids.getIdEquipamento()).clonarSemID();
         EquipamentoService.salva(q);
 
         this.iniciaTabelaEquipamentos();
         this.apagaDadosFrm();
-        Ids.idEquipamento = 0;
+        Ids.setIdEquipamento((Integer) 0);
     }//GEN-LAST:event_btnCopiarActionPerformed
+
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        this.apagaDadosFrm();
+        this.iniciaTabelaEquipamentos();
+        Ids.setIdEquipamento((Integer) 0);
+    }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        CircuitoFrm frm = new CircuitoFrm();
+        DesktopPane.desktop.add(frm);
+        frm.setVisible(true);
+        Ids.setIdEquipamento((Integer) 0);
+    }//GEN-LAST:event_formInternalFrameClosing
     private void cbUsabilidadeItens() {
         cbTipo.removeAllItems();
         cbTipo.addItem(null);
@@ -463,7 +514,7 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
                 if (evt.getValueIsAdjusting() == true && linha > -1) {
                     Equipamento equipamento = (Equipamento) tabelaModelo.loadItem(linha);
                     setDados(equipamento);
-                    Ids.idEquipamento = equipamento.getId();
+                    Ids.setIdEquipamento(equipamento.getId());
                 }
             }
         }
@@ -485,7 +536,7 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
         List<Equipamento> todos = EquipamentoService.getAll();
         List<Equipamento> lista = new ArrayList<>();
         for (Equipamento q : todos) {
-            if (Objects.equals(q.getCircuito().getId(), Ids.idCircuito)) {
+            if (Objects.equals(q.getCircuito().getId(), Ids.getIdCircuito())) {
                 lista.add(q);
             }
         }
@@ -501,13 +552,13 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
 
     private Equipamento getDados() {
         Equipamento equipamento;
-        if (Ids.idEquipamento > 0) {
-            equipamento = EquipamentoService.getById(TrataID.IntegerToInteger(Ids.idEquipamento));
+        if (Ids.getIdEquipamento() > 0) {
+            equipamento = EquipamentoService.getById(TrataID.IntegerToInteger(Ids.getIdEquipamento()));
         } else {
             equipamento = new Equipamento();
-            equipamento.setCircuito(CircuitoService.getById(TrataID.IntegerToInteger(Ids.idCircuito)));
+            equipamento.setCircuito(CircuitoService.getById(TrataID.IntegerToInteger(Ids.getIdCircuito())));
         }
-        equipamento.setId(TrataID.IntegerToInteger(Ids.idEquipamento));
+        equipamento.setId(TrataID.IntegerToInteger(Ids.getIdEquipamento()));
         equipamento.setNome(this.campoNome.getText());
         equipamento.setFd(Numero.stringToDouble(this.campoFd.getText(), 1));
         equipamento.setFu(Numero.stringToDouble(this.campoFutil.getText(), 1));
@@ -517,11 +568,11 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
         equipamento.setUsabilidade((Usabilidade) cbTipo.getModel().getSelectedItem());
         equipamento.setLigacao((Ligacao) cbLigacao.getModel().getSelectedItem());
         equipamento.setUnidade((UnidadePotencia) cbUnidade.getModel().getSelectedItem());
-        equipamento.setQuantidade(Integer.parseInt(cbQuantidade.getModel().getSelectedItem().toString()));
+        equipamento.setQuantidade(Numero.stringToInteger(cbQuantidade.getModel().getSelectedItem().toString(), 1));
         equipamento.setPotencia(Numero.stringToDouble(this.campoPotencia.getText(), 0));
         equipamento.setPerdasReator(Numero.stringToDouble(this.campoPerdasReator.getText(), 0));
         equipamento.setRendimento(Numero.stringToDouble(this.campoRendimento.getText(), 1));
-        equipamento.setTensaoFN(Numero.stringToDouble(campoTensao.getText(),0));
+        equipamento.setTensaoFN(Numero.stringToDouble(campoTensao.getText(), 0));
         return equipamento;
     }
 
@@ -544,7 +595,7 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
 
     public void setDados(Equipamento equipamento) {
         if (equipamento != null) {
-            Ids.idEquipamento = equipamento.getId();
+            Ids.setIdEquipamento(equipamento.getId());
             this.campoNome.setText(equipamento.getNome());
             this.campoFd.setText(Numero.decimal(equipamento.getFd(), "##.##"));
             this.campoFutil.setText(Numero.decimal(equipamento.getFu(), "##.##"));
@@ -554,7 +605,7 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
             this.cbTipo.getModel().setSelectedItem(equipamento.getUsabilidade());
             this.cbLigacao.getModel().setSelectedItem(equipamento.getLigacao());
             this.cbUnidade.getModel().setSelectedItem(equipamento.getUnidade());
-            this.cbQuantidade.setSelectedIndex(equipamento.getQuantidade());
+            this.cbQuantidade.setSelectedIndex(equipamento.getQuantidade()-1);
             this.campoPotencia.setText(Numero.decimal(equipamento.getPotencia(), "##.##"));
             this.campoPerdasReator.setText(Numero.decimal(equipamento.getPerdasReator(), "##.##"));
             this.campoRendimento.setText(Numero.decimal(equipamento.getRendimento(), "##.##"));
@@ -565,6 +616,7 @@ public class EquipamentoFrm extends javax.swing.JInternalFrame implements KeyLis
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCopiar;
     private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JTextField campoFd;
     private javax.swing.JTextField campoFp;

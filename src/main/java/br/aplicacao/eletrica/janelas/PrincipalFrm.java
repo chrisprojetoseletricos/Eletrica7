@@ -14,6 +14,8 @@ import javax.swing.JDesktopPane;
  */
 public class PrincipalFrm extends javax.swing.JFrame {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Creates new form Principal
      */

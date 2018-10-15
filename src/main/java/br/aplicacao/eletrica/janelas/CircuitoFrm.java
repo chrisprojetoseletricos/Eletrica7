@@ -38,6 +38,7 @@ public class CircuitoFrm extends javax.swing.JInternalFrame {
         initComponents();
         this.iniciaTabelaCircuitos();
         this.eventoSelecaoTabela();
+        Ids.setIdCircuito((Integer) 0);
     }
 
     /**
@@ -53,6 +54,7 @@ public class CircuitoFrm extends javax.swing.JInternalFrame {
         btnSalvar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnCopiar = new javax.swing.JButton();
+        btnNovo = new javax.swing.JButton();
         scrollEsquerdo = new javax.swing.JScrollPane();
         painelEsquerdo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -67,6 +69,23 @@ public class CircuitoFrm extends javax.swing.JInternalFrame {
         setResizable(true);
         setTitle("Circuito");
         setName("ProjetoFrm"); // NOI18N
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnSalvar.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
@@ -109,27 +128,44 @@ public class CircuitoFrm extends javax.swing.JInternalFrame {
             }
         });
 
+        btnNovo.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        btnNovo.setText("Novo");
+        btnNovo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnNovo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnNovo.setIconTextGap(2);
+        btnNovo.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        btnNovo.setMaximumSize(new java.awt.Dimension(71, 32));
+        btnNovo.setMinimumSize(new java.awt.Dimension(71, 32));
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelBotoesLayout = new javax.swing.GroupLayout(painelBotoes);
         painelBotoes.setLayout(painelBotoesLayout);
         painelBotoesLayout.setHorizontalGroup(
             painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelBotoesLayout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnExcluir)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(524, Short.MAX_VALUE))
+                .addContainerGap(481, Short.MAX_VALUE))
         );
         painelBotoesLayout.setVerticalGroup(
             painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelBotoesLayout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
+                .addContainerGap(18, Short.MAX_VALUE)
                 .addGroup(painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir)
-                    .addComponent(btnCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         getContentPane().add(painelBotoes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 681, -1));
@@ -206,19 +242,22 @@ public class CircuitoFrm extends javax.swing.JInternalFrame {
 
         getContentPane().add(painelDireito, new org.netbeans.lib.awtextra.AbsoluteConstraints(9, 154, 210, 260));
 
-        setBounds(0, 0, 241, 463);
+        setBounds(0, 0, 305, 463);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         Circuito circuito = this.getDados();
         condutorFrm = new CondutorFrm(null, true);
+        curtoFrm = new CurtoCircuitoFrm(null, true);
         //DesktopPane.desktop.add(condutorFrm);
         try {
-            condutorFrm.setDados(CircuitoService.getById(Ids.idCircuito).getCondutor());
+            condutorFrm.setDados(CircuitoService.getById(Ids.getIdCircuito()).getCondutor());
+            curtoFrm.setDados(CircuitoService.getById(Ids.getIdCircuito()).getCurto());
         } catch (Exception e) {
 
         }
         condutorFrm.setVisible(true);
+        curtoFrm.setVisible(true);
         try {
             circuito.setCondutor(condutorFrm.getCondutor());
             circuito.setCurto(curtoFrm.getCurto());
@@ -230,33 +269,36 @@ public class CircuitoFrm extends javax.swing.JInternalFrame {
         this.apagaDadosFrm();
         this.iniciaTabelaCircuitos();
         //Ids.idCircuito = 0;
-        Ids.idCondutor = 0;
-        Ids.idCurto = 0;
+        Ids.setIdCondutor((Integer) 0);
+        Ids.setIdCurto((Integer) 0);
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        CircuitoService.removeById(Ids.idCircuito);
+        Ids.imprimiIds();
+        CircuitoService.removeById(Ids.getIdCircuito());
         this.iniciaTabelaCircuitos();
         this.apagaDadosFrm();
-        Ids.idCircuito = 0;
-        Ids.idCondutor = 0;
-        Ids.idCurto = 0;
+        Ids.setIdCircuito((Integer) 0);
+        Ids.setIdCondutor((Integer) 0);
+        Ids.setIdCurto((Integer) 0);
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnCopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarActionPerformed
-        Circuito q = CircuitoService.getById(Ids.idCircuito).clonarSemID();
+        
+        Circuito q = CircuitoService.getById(Ids.getIdCircuito()).clonarSemID();
         CircuitoService.salva(q);
 
         for (Equipamento equipamento : q.getEquipamentos()) {
             Equipamento e = equipamento.clonarSemID();
+            e.setCircuito(q);
             EquipamentoService.salva(e);
         }
 
         this.iniciaTabelaCircuitos();
         this.apagaDadosFrm();
-        Ids.idCircuito = 0;
-        Ids.idCondutor = 0;
-        Ids.idCurto = 0;
+        Ids.setIdCircuito((Integer) 0);
+        Ids.setIdCondutor((Integer) 0);
+        Ids.setIdCurto((Integer) 0);
     }//GEN-LAST:event_btnCopiarActionPerformed
 
     private void tabelaCircuitoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCircuitoMouseClicked
@@ -264,16 +306,32 @@ public class CircuitoFrm extends javax.swing.JInternalFrame {
 
         }
         if (evt.getClickCount() == 2) {
-            if (Ids.idCircuito > 0) {
+            if (Ids.getIdCircuito() > 0) {
                 this.setVisible(false);
                 EquipamentoFrm equipamento = new EquipamentoFrm();
                 DesktopPane.desktop.add(equipamento);
                 equipamento.setVisible(true);
-                Ids.idCondutor = 0;
-                Ids.idCurto = 0;
+                Ids.setIdCondutor((Integer) 0);
+                Ids.setIdCurto((Integer) 0);
             }
         }
     }//GEN-LAST:event_tabelaCircuitoMouseClicked
+
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        this.apagaDadosFrm();
+        this.iniciaTabelaCircuitos();
+        Ids.setIdCircuito((Integer) 0);
+        Ids.setIdCondutor((Integer) 0);
+        Ids.setIdCurto((Integer) 0);
+    }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        QuadroFrm frm = new QuadroFrm();
+        DesktopPane.desktop.add(frm);
+        frm.setVisible(true);
+        Ids.setIdCircuito((Integer) 0);
+    }//GEN-LAST:event_formInternalFrameClosing
+    
     private void eventoSelecaoTabela() {
         tabelaCircuito.getSelectionModel().addListSelectionListener(
                 new ListSelectionListener() {
@@ -283,11 +341,11 @@ public class CircuitoFrm extends javax.swing.JInternalFrame {
                 if (evt.getValueIsAdjusting() == true && linha > -1) {
                     Circuito circuito = (Circuito) tabelaModelo.loadItem(linha);
                     setDados(circuito);
-                    Ids.idCircuito = circuito.getId();
+                    Ids.setIdCircuito(circuito.getId());
                     Ids.imprimiIds();
                     try {
-                        Ids.idCondutor = circuito.getCondutor().getId();
-                        Ids.idCurto = circuito.getCurto().getId();
+                        Ids.setIdCondutor(circuito.getCondutor().getId());
+                        Ids.setIdCurto(circuito.getCurto().getId());
                     } catch (Exception e) {
                     }
                 }
@@ -302,7 +360,7 @@ public class CircuitoFrm extends javax.swing.JInternalFrame {
         List<Circuito> todos = CircuitoService.getAll();
         List<Circuito> lista = new ArrayList<>();
         for (Circuito q : todos) {
-            if (Objects.equals(q.getQuadro().getId(), Ids.idQuadro)) {
+            if (Objects.equals(q.getQuadro().getId(), Ids.getIdQuadro())) {
                 lista.add(q);
             }
         }
@@ -318,26 +376,26 @@ public class CircuitoFrm extends javax.swing.JInternalFrame {
 
     private Circuito getDados() {
         Circuito circuito;
-        if (Ids.idCircuito > 0) {
-            circuito = CircuitoService.getById(TrataID.IntegerToInteger(Ids.idCircuito));
+        if (Ids.getIdCircuito() > 0) {
+            circuito = CircuitoService.getById(TrataID.IntegerToInteger(Ids.getIdCircuito()));
         } else {
             circuito = new Circuito();
-            circuito.setQuadro(QuadroService.getById(TrataID.IntegerToInteger(Ids.idQuadro)));
+            circuito.setQuadro(QuadroService.getById(TrataID.IntegerToInteger(Ids.getIdQuadro())));
         }
-        circuito.setId(TrataID.IntegerToInteger(Ids.idCircuito));
+        circuito.setId(TrataID.IntegerToInteger(Ids.getIdCircuito()));
         circuito.setNome(this.campoNome.getText());
 
         return circuito;
     }
 
     public void apagaDadosFrm() {
-        Ids.idCircuito = 0;
+        Ids.setIdCircuito((Integer) 0);
         this.campoNome.setText("");
     }
 
     public void setDados(Circuito circuito) {
         if (circuito != null) {
-            Ids.idCircuito = circuito.getId();
+            Ids.setIdCircuito(circuito.getId());
             this.campoNome.setText(circuito.getNome());
         }
     }
@@ -345,6 +403,7 @@ public class CircuitoFrm extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCopiar;
     private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JTextField campoNome;
     private javax.swing.JLabel jLabel1;

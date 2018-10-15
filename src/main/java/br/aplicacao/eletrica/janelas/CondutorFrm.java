@@ -24,6 +24,7 @@ import java.awt.event.KeyListener;
 public class CondutorFrm extends javax.swing.JDialog implements KeyListener {
 
     private static Condutor condutor;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates new form TesteJDialog
@@ -349,35 +350,34 @@ public class CondutorFrm extends javax.swing.JDialog implements KeyListener {
 
     private static Condutor getDados() {
 
-        if (Ids.idCondutor > 0) {
-            condutor = CondutorService.getById(Ids.idCondutor);
+        if (Ids.getIdCondutor() > 0) {
+            condutor = CondutorService.getById(Ids.getIdCondutor());
         } else {
             condutor = new Condutor();
         }
 
-        condutor.setId(TrataID.IntegerToInteger(Ids.idCondutor));
+        condutor.setId(TrataID.IntegerToInteger(Ids.getIdCondutor()));
         condutor.setQuedaTensao(Numero.stringToDouble(campoQuedaTensao.getText(), 1));
         condutor.setResistiTermica(Numero.stringToDouble(campoResistividade.getText(), 0));
         condutor.setTemperatura((TempAmbiente) cbTemperatura.getModel().getSelectedItem());
         condutor.setComprimento(Numero.stringToDouble(campoComprimento.getText(), 1));
         condutor.setModoInstalacao((Instalacao) cbInstalacao.getModel().getSelectedItem());
-        condutor.setMaterial(cbMaterial.getModel().getSelectedItem().toString());
-        condutor.setIsolacao(cbIsolacao.getModel().getSelectedItem().toString());
-        condutor.setEnterrado(cbEnterrado.getModel().getSelectedItem().toString());
+        condutor.setMaterial((String) cbMaterial.getModel().getSelectedItem());
+        condutor.setIsolacao((String) cbIsolacao.getModel().getSelectedItem());
+        condutor.setEnterrado((String) cbEnterrado.getModel().getSelectedItem());
         condutor.setEspacoCabos((EspacamentoCabos) cbEspacamentoCabos.getModel().getSelectedItem());
-        condutor.setMultipolar(cbMultipolar.getModel().getSelectedItem().toString());
-        condutor.setFormaAgrupa(cbAgrupamento.getModel().getSelectedItem().toString());
-        condutor.setBitolaSucessiva(cbBitolasSucessivas.getModel().getSelectedItem().toString());
-        condutor.setnCirAgrupa(
-                Integer.parseInt(cbNCircuitosAgrupados.getModel().getSelectedItem().toString()));
-        condutor.setnCamadas(Integer.parseInt(cbNCamadas.getModel().getSelectedItem().toString()));
+        condutor.setMultipolar((String) cbMultipolar.getModel().getSelectedItem());
+        condutor.setFormaAgrupa((String) cbAgrupamento.getModel().getSelectedItem());
+        condutor.setBitolaSucessiva((String) cbBitolasSucessivas.getModel().getSelectedItem());
+        condutor.setnCirAgrupa(Numero.stringToInteger(cbNCircuitosAgrupados.getModel().getSelectedItem().toString(),1));
+        condutor.setnCamadas(Numero.stringToInteger(cbNCamadas.getModel().getSelectedItem().toString(),0));
 
         return condutor;
     }
 
     public Condutor setDados(Condutor condutor) {
         if (condutor != null) {
-            Ids.idCondutor = condutor.getId();
+            Ids.setIdCondutor(condutor.getId());
             campoQuedaTensao.setText(Numero.decimal(condutor.getQuedaTensao(), "##.##"));
             campoResistividade.setText(Numero.decimal(condutor.getResistiTermica(), "##.##"));
             cbTemperatura.getModel().setSelectedItem(condutor.getTemperatura());

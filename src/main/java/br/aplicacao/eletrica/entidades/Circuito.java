@@ -43,7 +43,7 @@ public class Circuito implements Serializable, Entidade<Circuito> {
     @OneToOne(cascade = CascadeType.ALL)
     @Column(colName = "Dados CC", colPosition = 2)
     private Curto curto;
-    @OneToMany(mappedBy = "circuito", targetEntity = Equipamento.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "circuito", cascade = CascadeType.ALL)
     private List<Equipamento> equipamentos = new ArrayList<Equipamento>();
     @Column(colName = "Circuito", colPosition = 0)
     private String nome;

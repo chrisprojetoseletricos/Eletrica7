@@ -7,6 +7,7 @@ package br.aplicacao.eletrica.janelas;
 
 import br.aplicacao.eletrica.controle.Ids;
 import br.aplicacao.eletrica.entidades.Concessionaria;
+import br.aplicacao.eletrica.entidades.RamalLigacao;
 import br.aplicacao.eletrica.enums.BitolasMili;
 import br.aplicacao.eletrica.enums.DiametroPolegadas;
 import br.aplicacao.eletrica.enums.DisjuntorTermoMag;
@@ -14,9 +15,11 @@ import br.aplicacao.eletrica.enums.MetodoCalculo;
 import br.aplicacao.eletrica.enums.TiposCondutores;
 import br.aplicacao.eletrica.enums.TiposFornecimento;
 import br.aplicacao.eletrica.servico.ConcessionariaService;
+import br.aplicacao.eletrica.servico.RamalLigacaoService;
 import br.aplicacao.eletrica.uteis.ApenasNumero;
 import br.aplicacao.eletrica.uteis.TrataID;
 import br.aplicacao.eletrica.servico.tableModel.GenericTableModel;
+import br.aplicacao.eletrica.uteis.Numero;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.List;
@@ -28,7 +31,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author chris
  */
-public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
+public final class ConcessionariasFrm extends javax.swing.JInternalFrame implements KeyListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,17 +42,19 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
      */
     public ConcessionariasFrm() {
         initComponents();
-        this.iniciaTabelaConcessionarias();
+        iniciaTabelaConcessionarias();
         this.eventoSelecaoTabela();
-        this.eventoDigitar();
+        adicionarKeyListener();
         cbMetodoCalculoItens();
         cbTiposFornecimentoItens();
         cbTipoCondutorItens();
         cbFaseMinimaItens();
         cbNeutroMinimoItens();
         cbDiametroEletroAcoGalvaItens();
-        cbDiametroEletroAcoGalva1Itens();
-        cbdisjuntorTermoMagItens();
+        cbDiametroEletroAcoGalvaAterramentoItens();
+        cbDisjuntorTermoMagItens();
+        cbCondutorAterramentoItens();
+        cbBitolaItens();
     }
 
     /**
@@ -78,23 +83,35 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
         cbTiposFornecimento = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         campoCarga = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        cbdisjuntorTermoMag = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         campoLocal = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        cbTipoCondutor = new javax.swing.JComboBox<>();
-        jLabel9 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        cbdisjuntorTermoMag = new javax.swing.JComboBox<>();
+        jLabel27 = new javax.swing.JLabel();
         cbFaseMinima = new javax.swing.JComboBox<>();
-        jLabel10 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
         cbNeutroMinimo = new javax.swing.JComboBox<>();
-        jLabel11 = new javax.swing.JLabel();
-        cbDiametroEletroAcoGalva = new javax.swing.JComboBox<>();
-        jLabel12 = new javax.swing.JLabel();
-        cbDiametroEletroAcoGalvaEnterrado = new javax.swing.JComboBox<>();
         painelDireito = new javax.swing.JPanel();
         scrollDireito = new javax.swing.JScrollPane();
         tabelaConcessionaria = new javax.swing.JTable();
+        scrollEsquerdo1 = new javax.swing.JScrollPane();
+        painelEsquerdo1 = new javax.swing.JPanel();
+        jLabel20 = new javax.swing.JLabel();
+        cbTipoCondutor = new javax.swing.JComboBox<>();
+        jLabel21 = new javax.swing.JLabel();
+        cbBitola = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        campoDistanciaOrla = new javax.swing.JTextField();
+        jLabel22 = new javax.swing.JLabel();
+        cbMaterial = new javax.swing.JComboBox<>();
+        scrollEsquerdo2 = new javax.swing.JScrollPane();
+        painelEsquerdo2 = new javax.swing.JPanel();
+        jLabel29 = new javax.swing.JLabel();
+        cbDiametroEletroAcoGalva = new javax.swing.JComboBox<>();
+        jLabel30 = new javax.swing.JLabel();
+        cbDiametroEletroAcoGalvaEnterrado = new javax.swing.JComboBox<>();
+        jLabel31 = new javax.swing.JLabel();
+        cbCondutorAterramento = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -192,19 +209,13 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
 
         campoCarga.setName("campoCarga"); // NOI18N
 
-        jLabel6.setText("Disjuntor termo-magnético (A):");
-
         jLabel7.setText("Local:");
 
-        jLabel8.setText("Tipo de condutor:");
+        jLabel18.setText("Disjuntor termo-magnético (A):");
 
-        jLabel9.setText("Fase mínima de cobre isolado (mm2):");
+        jLabel27.setText("Fase mínima de cobre isolado (mm²):");
 
-        jLabel10.setText("Neutro mínima de cobre isolado (mm2):");
-
-        jLabel11.setText("Diâmetro do eletroduto de aço galva (pol): ");
-
-        jLabel12.setText("Diâmetro do eletroduto de aterramento (pol): ");
+        jLabel28.setText("Neutro mínima de cobre isolado (mm²):");
 
         javax.swing.GroupLayout painelEsquerdoLayout = new javax.swing.GroupLayout(painelEsquerdo);
         painelEsquerdo.setLayout(painelEsquerdoLayout);
@@ -213,10 +224,6 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
             .addGroup(painelEsquerdoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(painelEsquerdoLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(24, 24, 24)
-                        .addComponent(cbdisjuntorTermoMag, 0, 202, Short.MAX_VALUE))
                     .addGroup(painelEsquerdoLayout.createSequentialGroup()
                         .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -227,35 +234,24 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
                             .addComponent(jLabel7))
                         .addGap(12, 12, 12)
                         .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(campoNome)
+                            .addComponent(campoTensao)
                             .addComponent(campoLocal)
                             .addComponent(campoCarga)
-                            .addComponent(cbTiposFornecimento, 0, 265, Short.MAX_VALUE)
-                            .addGroup(painelEsquerdoLayout.createSequentialGroup()
-                                .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(campoNome, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-                                    .addComponent(campoTensao, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-                                    .addComponent(cbMetodoCalculo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                            .addComponent(cbMetodoCalculo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbTiposFornecimento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelEsquerdoLayout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cbTipoCondutor, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(painelEsquerdoLayout.createSequentialGroup()
-                        .addComponent(jLabel9)
+                        .addComponent(jLabel18)
                         .addGap(24, 24, 24)
-                        .addComponent(cbFaseMinima, 0, 159, Short.MAX_VALUE))
+                        .addComponent(cbdisjuntorTermoMag, 0, 132, Short.MAX_VALUE))
                     .addGroup(painelEsquerdoLayout.createSequentialGroup()
-                        .addComponent(jLabel10)
+                        .addComponent(jLabel27)
                         .addGap(24, 24, 24)
-                        .addComponent(cbNeutroMinimo, 0, 144, Short.MAX_VALUE))
+                        .addComponent(cbFaseMinima, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(painelEsquerdoLayout.createSequentialGroup()
-                        .addComponent(jLabel11)
+                        .addComponent(jLabel28)
                         .addGap(24, 24, 24)
-                        .addComponent(cbDiametroEletroAcoGalva, 0, 115, Short.MAX_VALUE))
-                    .addGroup(painelEsquerdoLayout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addGap(24, 24, 24)
-                        .addComponent(cbDiametroEletroAcoGalvaEnterrado, 0, 92, Short.MAX_VALUE)))
+                        .addComponent(cbNeutroMinimo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         painelEsquerdoLayout.setVerticalGroup(
@@ -287,29 +283,17 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
                     .addComponent(cbTiposFornecimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
+                    .addComponent(jLabel18)
                     .addComponent(cbdisjuntorTermoMag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(cbTipoCondutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
+                    .addComponent(jLabel27)
                     .addComponent(cbFaseMinima, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
+                    .addComponent(jLabel28)
                     .addComponent(cbNeutroMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(cbDiametroEletroAcoGalva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(cbDiametroEletroAcoGalvaEnterrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         scrollEsquerdo.setViewportView(painelEsquerdo);
@@ -330,6 +314,7 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
 
             }
         ));
+        tabelaConcessionaria.setName("tabelaConcessionaria"); // NOI18N
         tabelaConcessionaria.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tabelaConcessionariaMouseClicked(evt);
@@ -341,12 +326,132 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
         painelDireito.setLayout(painelDireitoLayout);
         painelDireitoLayout.setHorizontalGroup(
             painelDireitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollDireito, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+            .addComponent(scrollDireito)
         );
         painelDireitoLayout.setVerticalGroup(
             painelDireitoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollDireito, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(scrollDireito, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
         );
+
+        scrollEsquerdo1.setBorder(null);
+        scrollEsquerdo1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        painelEsquerdo1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ramal de ligação", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 204))); // NOI18N
+        painelEsquerdo1.setPreferredSize(new java.awt.Dimension(300, 150));
+
+        jLabel20.setText("Tipo de condutor:");
+
+        jLabel21.setText("Bitola (mm²):");
+
+        jLabel6.setText("Distância para Orla marítima (m):");
+
+        campoDistanciaOrla.setName("campoDistanciaOrla"); // NOI18N
+
+        jLabel22.setText("Material utilizado:");
+
+        cbMaterial.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cobre", "Alumínio" }));
+
+        javax.swing.GroupLayout painelEsquerdo1Layout = new javax.swing.GroupLayout(painelEsquerdo1);
+        painelEsquerdo1.setLayout(painelEsquerdo1Layout);
+        painelEsquerdo1Layout.setHorizontalGroup(
+            painelEsquerdo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelEsquerdo1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelEsquerdo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(painelEsquerdo1Layout.createSequentialGroup()
+                        .addComponent(jLabel20)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                        .addComponent(cbTipoCondutor, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(painelEsquerdo1Layout.createSequentialGroup()
+                        .addComponent(jLabel21)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
+                        .addComponent(cbBitola, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelEsquerdo1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(12, 12, 12)
+                        .addComponent(campoDistanciaOrla))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelEsquerdo1Layout.createSequentialGroup()
+                        .addComponent(jLabel22)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                        .addComponent(cbMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        painelEsquerdo1Layout.setVerticalGroup(
+            painelEsquerdo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelEsquerdo1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelEsquerdo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(cbTipoCondutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(painelEsquerdo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel21)
+                    .addComponent(cbBitola, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(painelEsquerdo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel22)
+                    .addComponent(cbMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(painelEsquerdo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(campoDistanciaOrla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        scrollEsquerdo1.setViewportView(painelEsquerdo1);
+
+        scrollEsquerdo2.setBorder(null);
+        scrollEsquerdo2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        painelEsquerdo2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Informações", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 204))); // NOI18N
+        painelEsquerdo2.setPreferredSize(new java.awt.Dimension(300, 150));
+
+        jLabel29.setText("Diâmetro do eletroduto de aço galva (pol): ");
+
+        jLabel30.setText("Diâmetro do eletroduto de aterramento (pol): ");
+
+        jLabel31.setText("Condutor de aterramento (mm²)");
+
+        javax.swing.GroupLayout painelEsquerdo2Layout = new javax.swing.GroupLayout(painelEsquerdo2);
+        painelEsquerdo2.setLayout(painelEsquerdo2Layout);
+        painelEsquerdo2Layout.setHorizontalGroup(
+            painelEsquerdo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelEsquerdo2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelEsquerdo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(painelEsquerdo2Layout.createSequentialGroup()
+                        .addComponent(jLabel29)
+                        .addGap(24, 24, 24)
+                        .addComponent(cbDiametroEletroAcoGalva, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(painelEsquerdo2Layout.createSequentialGroup()
+                        .addComponent(jLabel30)
+                        .addGap(24, 24, 24)
+                        .addComponent(cbDiametroEletroAcoGalvaEnterrado, 0, 102, Short.MAX_VALUE))
+                    .addGroup(painelEsquerdo2Layout.createSequentialGroup()
+                        .addComponent(jLabel31)
+                        .addGap(24, 24, 24)
+                        .addComponent(cbCondutorAterramento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        painelEsquerdo2Layout.setVerticalGroup(
+            painelEsquerdo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelEsquerdo2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelEsquerdo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel29)
+                    .addComponent(cbDiametroEletroAcoGalva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(painelEsquerdo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel30)
+                    .addComponent(cbDiametroEletroAcoGalvaEnterrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(painelEsquerdo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel31)
+                    .addComponent(cbCondutorAterramento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(39, Short.MAX_VALUE))
+        );
+
+        scrollEsquerdo2.setViewportView(painelEsquerdo2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -355,9 +460,14 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
             .addComponent(painelBotoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scrollEsquerdo, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(painelDireito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(painelDireito, javax.swing.GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(scrollEsquerdo, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(scrollEsquerdo1, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scrollEsquerdo2, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -366,12 +476,17 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
                 .addComponent(painelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(scrollEsquerdo, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
-                    .addComponent(painelDireito, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(scrollEsquerdo, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(scrollEsquerdo1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(scrollEsquerdo2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(painelDireito, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        setBounds(0, 0, 691, 481);
+        setBounds(0, 0, 942, 587);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
@@ -383,19 +498,21 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        ConcessionariaService.removeById(Ids.idConcessionaria);
+        ConcessionariaService.removeById(Ids.getIdConcessionaria());
         this.iniciaTabelaConcessionarias();
         this.apagaDadosFrm();
-        Ids.idConcessionaria = 0;
+        Ids.setIdConcessionaria((Integer) 0);
+        Ids.setIdRamalLigacao((Integer) 0);
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnCopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarActionPerformed
-        Concessionaria concessionaria = ConcessionariaService.getById(Ids.idConcessionaria).clonarSemID();
+        Concessionaria concessionaria = ConcessionariaService.getById(Ids.getIdConcessionaria()).clonarSemID();
         ConcessionariaService.salva(concessionaria);
 
         this.iniciaTabelaConcessionarias();
         this.apagaDadosFrm();
-        Ids.idConcessionaria = 0;
+        Ids.setIdConcessionaria((Integer) 0);
+        Ids.setIdRamalLigacao((Integer) 0);
     }//GEN-LAST:event_btnCopiarActionPerformed
 
     private void tabelaConcessionariaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaConcessionariaMouseClicked
@@ -406,6 +523,11 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
 
         }
     }//GEN-LAST:event_tabelaConcessionariaMouseClicked
+
+    private void adicionarKeyListener() {
+        campoTensao.addKeyListener(this);
+        campoDistanciaOrla.addKeyListener(this);
+    }
 
     private void cbMetodoCalculoItens() {
         cbMetodoCalculo.removeAllItems();
@@ -423,7 +545,7 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
         }
     }
 
-    private void cbdisjuntorTermoMagItens() {
+    private void cbDisjuntorTermoMagItens() {
         cbdisjuntorTermoMag.removeAllItems();
         cbdisjuntorTermoMag.addItem(null);
         for (DisjuntorTermoMag usa : DisjuntorTermoMag.getLista()) {
@@ -463,11 +585,27 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
         }
     }
 
-    private void cbDiametroEletroAcoGalva1Itens() {
+    private void cbDiametroEletroAcoGalvaAterramentoItens() {
         cbDiametroEletroAcoGalvaEnterrado.removeAllItems();
         cbDiametroEletroAcoGalvaEnterrado.addItem(null);
         for (DiametroPolegadas usa : DiametroPolegadas.getLista()) {
             cbDiametroEletroAcoGalvaEnterrado.addItem(usa);
+        }
+    }
+
+    private void cbCondutorAterramentoItens() {
+        cbCondutorAterramento.removeAllItems();
+        cbCondutorAterramento.addItem(null);
+        for (BitolasMili usa : BitolasMili.getLista()) {
+            cbCondutorAterramento.addItem(usa);
+        }
+    }
+
+    private void cbBitolaItens() {
+        cbBitola.removeAllItems();
+        cbBitola.addItem(null);
+        for (BitolasMili usa : BitolasMili.getLista()) {
+            cbBitola.addItem(usa);
         }
     }
 
@@ -480,32 +618,12 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
                 if (evt.getValueIsAdjusting() == true && linha > -1) {
                     Concessionaria concessionaria = (Concessionaria) tabelaModelo.loadItem(linha);
                     setDados(concessionaria);
-                    Ids.idConcessionaria = concessionaria.getId();
+                    Ids.setIdRamalLigacao(concessionaria.getRamalLigacao().getId());
+                    Ids.setIdConcessionaria(concessionaria.getId());
                 }
             }
         }
         );
-    }
-
-    private void eventoDigitar() {
-        this.campoTensao.addKeyListener(
-                new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                ApenasNumero.campo(e, "campoTensao");
-                ApenasNumero.campo(e, "campoCarga");
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
-        });
     }
 
     public void iniciaTabelaConcessionarias() {
@@ -524,15 +642,21 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
 
     private Concessionaria getDados() {
         Concessionaria concessionaria;
-        if (Ids.idConcessionaria > 0) {
-            concessionaria = ConcessionariaService.getById(Ids.idConcessionaria);
+        RamalLigacao ramalLigacao;
+        if (Ids.getIdConcessionaria() > 0) {
+            concessionaria = ConcessionariaService.getById(Ids.getIdConcessionaria());
         } else {
             concessionaria = new Concessionaria();
         }
-        concessionaria.setId(TrataID.IntegerToInteger(Ids.idConcessionaria));
+        if (Ids.getIdRamalLigacao() > 0) {
+            ramalLigacao = RamalLigacaoService.getById(Ids.getIdRamalLigacao());
+        } else {
+            ramalLigacao = new RamalLigacao();
+        }
+        concessionaria.setId(TrataID.IntegerToInteger(Ids.getIdConcessionaria()));
         concessionaria.setCarga(this.campoCarga.getText());
         concessionaria.setNome(this.campoNome.getText());
-        concessionaria.setNome(this.campoLocal.getText());
+        concessionaria.setLocalizacao(this.campoLocal.getText());
         concessionaria.setMetodoCalculo((MetodoCalculo) cbMetodoCalculo.getModel().getSelectedItem());
         concessionaria.setTiposFornecimento((TiposFornecimento) cbTiposFornecimento.getModel().getSelectedItem());
         concessionaria.setDisjuntorTermoMag((DisjuntorTermoMag) cbdisjuntorTermoMag.getModel().getSelectedItem());
@@ -541,15 +665,25 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
         concessionaria.setNeutroMinimoCobreIsolado((BitolasMili) cbNeutroMinimo.getModel().getSelectedItem());
         concessionaria.setDiametroEletroAcoGalva((DiametroPolegadas) cbDiametroEletroAcoGalva.getModel().getSelectedItem());
         concessionaria.setDiametroEletroAterramento((DiametroPolegadas) cbDiametroEletroAcoGalvaEnterrado.getModel().getSelectedItem());
+        concessionaria.setTensaoFN(Numero.stringToDouble(campoTensao.getText(), 0));
+        concessionaria.setCondutorAterramentoAco((BitolasMili) cbCondutorAterramento.getModel().getSelectedItem());
+        ramalLigacao.setBitola((BitolasMili) cbBitola.getModel().getSelectedItem());
+        ramalLigacao.setCondutor((TiposCondutores) cbTipoCondutor.getModel().getSelectedItem());
+        ramalLigacao.setMaterial((String) cbMaterial.getModel().getSelectedItem());
+        ramalLigacao.setDistanciaOrla(campoDistanciaOrla.getText());
+        RamalLigacaoService.salva(ramalLigacao);
+        concessionaria.setRamalLigacao(ramalLigacao);
         return concessionaria;
     }
 
     public void apagaDadosFrm() {
 
-        Ids.idConcessionaria = 0;
+        Ids.setIdConcessionaria((Integer) 0);
+        Ids.setIdRamalLigacao((Integer) 0);
         this.campoCarga.setText("");
         this.campoNome.setText("");
         this.campoLocal.setText("");
+        this.campoTensao.setText("");
         cbMetodoCalculo.setSelectedIndex(-1);
         cbTiposFornecimento.setSelectedIndex(-1);
         cbdisjuntorTermoMag.setSelectedIndex(-1);
@@ -558,14 +692,20 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
         cbNeutroMinimo.setSelectedIndex(-1);
         cbDiametroEletroAcoGalva.setSelectedIndex(-1);
         cbDiametroEletroAcoGalvaEnterrado.setSelectedIndex(-1);
+        cbCondutorAterramento.setSelectedIndex(-1);
+        cbBitola.setSelectedIndex(-1);
+        cbMaterial.setSelectedIndex(-1);
+        cbTipoCondutor.setSelectedIndex(-1);
+        campoDistanciaOrla.setText("");
     }
 
     public void setDados(Concessionaria concessionaria) {
         if (concessionaria != null) {
-            Ids.idConcessionaria = concessionaria.getId();
+            Ids.setIdConcessionaria(concessionaria.getId());
             this.campoCarga.setText(concessionaria.getCarga());
             this.campoNome.setText(concessionaria.getNome());
             this.campoLocal.setText(concessionaria.getLocalizacao());
+            this.campoTensao.setText(Numero.decimal(concessionaria.getTensaoFN(), "##.##"));
             cbMetodoCalculo.getModel().setSelectedItem(concessionaria.getMetodoCalculo());
             cbTiposFornecimento.getModel().setSelectedItem(concessionaria.getTiposFornecimento());
             cbdisjuntorTermoMag.getModel().setSelectedItem(concessionaria.getDisjuntorTermoMag());
@@ -574,6 +714,11 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
             cbNeutroMinimo.getModel().setSelectedItem(concessionaria.getNeutroMinimoCobreIsolado());
             cbDiametroEletroAcoGalva.getModel().setSelectedItem(concessionaria.getDiametroEletroAcoGalva());
             cbDiametroEletroAcoGalvaEnterrado.getModel().setSelectedItem(concessionaria.getDiametroEletroAterramento());
+            cbCondutorAterramento.getModel().setSelectedItem(concessionaria.getCondutorAterramentoAco());
+            cbBitola.getModel().setSelectedItem(concessionaria.getRamalLigacao().getBitola());
+            cbMaterial.getModel().setSelectedItem(concessionaria.getRamalLigacao().getMaterial());
+            cbTipoCondutor.getModel().setSelectedItem(concessionaria.getRamalLigacao().getCondutor());
+            campoDistanciaOrla.setText(concessionaria.getRamalLigacao().getDistanciaOrla());
         }
     }
 
@@ -582,35 +727,64 @@ public final class ConcessionariasFrm extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JTextField campoCarga;
+    private javax.swing.JTextField campoDistanciaOrla;
     private javax.swing.JTextField campoLocal;
     private javax.swing.JTextField campoNome;
     private javax.swing.JTextField campoTensao;
+    private javax.swing.JComboBox<BitolasMili> cbBitola;
+    private javax.swing.JComboBox<BitolasMili> cbCondutorAterramento;
     private javax.swing.JComboBox<DiametroPolegadas> cbDiametroEletroAcoGalva;
     private javax.swing.JComboBox<DiametroPolegadas> cbDiametroEletroAcoGalvaEnterrado;
     private javax.swing.JComboBox<BitolasMili> cbFaseMinima;
+    private javax.swing.JComboBox<String> cbMaterial;
     private javax.swing.JComboBox<MetodoCalculo> cbMetodoCalculo;
     private javax.swing.JComboBox<BitolasMili> cbNeutroMinimo;
     private javax.swing.JComboBox<TiposCondutores> cbTipoCondutor;
     private javax.swing.JComboBox<TiposFornecimento> cbTiposFornecimento;
     private javax.swing.JComboBox<DisjuntorTermoMag> cbdisjuntorTermoMag;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblIdFonte;
     private javax.swing.JPanel painelBotoes;
     private javax.swing.JPanel painelDireito;
     private javax.swing.JPanel painelEsquerdo;
+    private javax.swing.JPanel painelEsquerdo1;
+    private javax.swing.JPanel painelEsquerdo2;
     private javax.swing.JScrollPane scrollDireito;
     private javax.swing.JScrollPane scrollEsquerdo;
+    private javax.swing.JScrollPane scrollEsquerdo1;
+    private javax.swing.JScrollPane scrollEsquerdo2;
     private javax.swing.JTable tabelaConcessionaria;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        ApenasNumero.campo(e, "campoTensao");
+        ApenasNumero.campo(e, "campoDistanciaOrla");
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
 }

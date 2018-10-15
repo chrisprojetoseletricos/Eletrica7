@@ -1,10 +1,15 @@
 package conexao;
 
+import br.aplicacao.eletrica.entidades.Circuito;
 import br.aplicacao.eletrica.entidades.Condutor;
+import br.aplicacao.eletrica.entidades.Curto;
+import br.aplicacao.eletrica.entidades.Equipamento;
 import br.aplicacao.eletrica.entidades.Fonte;
 import br.aplicacao.eletrica.entidades.Projeto;
 import br.aplicacao.eletrica.entidades.Quadro;
-import br.aplicacao.eletrica.servico.QuadroService;
+import br.aplicacao.eletrica.servico.CondutorService;
+import br.aplicacao.eletrica.servico.CurtoService;
+import br.aplicacao.eletrica.servico.EquipamentoService;
 
 public class testeconexao5 {
 
@@ -20,14 +25,28 @@ public class testeconexao5 {
         fonte.setTensaoFN(110);
         fonte.setProjeto(projeto);
 
-        Condutor condutor = new Condutor();
-        condutor.setComprimento(100);
-
         Quadro quadro = new Quadro();
         quadro.setNome("teste");
-        quadro.setCondutor(condutor);
+        quadro.setFonte(fonte);
+        
+        Condutor c = new Condutor();
+        c.setComprimento(4);
+        CondutorService.salva(c);
+        Curto cu = new Curto();
+        cu.setCorrenteCurto(23);
+        CurtoService.salva(cu);
+        
+        Circuito circuito = new Circuito();
+        circuito.setNome("testeCircuito");
+        circuito.setQuadro(quadro);
+        circuito.setCondutor(c);
+        circuito.setCurto(cu);
+        
+        Equipamento e = new Equipamento();
+        e.setNome("testeequi");
+        e.setCircuito(circuito);
 
-        QuadroService.salva(quadro);
+        EquipamentoService.salva(e);
 
         /*
 		 * Projeto projeto2 = projeto.clonarSemID();

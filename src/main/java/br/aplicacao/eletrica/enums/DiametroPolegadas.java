@@ -5,10 +5,11 @@ import java.util.List;
 
 public enum DiametroPolegadas {
 
+    P1_2("1/2'"),
     P1("1'"),
     P1_1_2("1 1/2'"),
-    D2("2'"),
-    D3("3'");
+    P2("2'"),
+    P3("3'");
     
 
     private final String numero;
@@ -23,10 +24,11 @@ public enum DiametroPolegadas {
 
     public static List<DiametroPolegadas> getLista() {
         List<DiametroPolegadas> lista = new ArrayList<>();
+        lista.add(DiametroPolegadas.P1_2);
         lista.add(DiametroPolegadas.P1);
         lista.add(DiametroPolegadas.P1_1_2);
-        lista.add(DiametroPolegadas.D2);
-        lista.add(DiametroPolegadas.D3);
+        lista.add(DiametroPolegadas.P2);
+        lista.add(DiametroPolegadas.P3);
         return lista;
     }
 }

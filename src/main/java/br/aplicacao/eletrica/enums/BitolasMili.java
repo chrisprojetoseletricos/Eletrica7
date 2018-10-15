@@ -6,6 +6,7 @@ import java.util.List;
 
 public enum BitolasMili {
 
+    B4("4"),
     B6("6"),
     B10("10"),
     B16("16"),
@@ -27,6 +28,7 @@ public enum BitolasMili {
 
     public static List<BitolasMili> getLista() {
         List<BitolasMili> lista = new ArrayList<>();
+        lista.add(BitolasMili.B4);
         lista.add(BitolasMili.B6);
         lista.add(BitolasMili.B10);
         lista.add(BitolasMili.B16);

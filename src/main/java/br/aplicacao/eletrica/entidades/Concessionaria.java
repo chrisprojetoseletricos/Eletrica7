@@ -11,12 +11,20 @@ import br.aplicacao.eletrica.enums.DisjuntorTermoMag;
 import br.aplicacao.eletrica.enums.MetodoCalculo;
 import br.aplicacao.eletrica.enums.TiposCondutores;
 import br.aplicacao.eletrica.enums.TiposFornecimento;
+import br.aplicacao.eletrica.servico.tableModel.Column;
 import br.aplicacao.eletrica.servico.tableModel.TableModel;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -32,19 +40,64 @@ public class Concessionaria implements Serializable, Entidade<Concessionaria> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @Column(colName = "Nome", colPosition = 0)
     private String nome;
     private String localizacao;
+    @Column(colName = "Tensão", colPosition = 1)
     private double tensaoFN;
+    @Column(colName = "Método", colPosition = 2)
+    @Enumerated(EnumType.STRING)
     private MetodoCalculo metodoCalculo;
+    @Column(colName = "Rede", colPosition = 3)
+    @Enumerated(EnumType.STRING)
     private TiposFornecimento tiposFornecimento;
+    @Column(colName = "Carga", colPosition = 4)
     private String carga;
+    @Column(colName = "DisjTM", colPosition = 5)
+    @Enumerated(EnumType.STRING)
     private DisjuntorTermoMag disjuntorTermoMag;
+    @Column(colName = "Condutor", colPosition = 6)
+    @Enumerated(EnumType.STRING)
     private TiposCondutores tipoCondutor;
+    @Column(colName = "Fase mm²", colPosition = 7)
+    @Enumerated(EnumType.STRING)
     private BitolasMili faseMinimaCobreIsolado;
+    @Column(colName = "Neutro mm²", colPosition = 8)
+    @Enumerated(EnumType.STRING)
     private BitolasMili neutroMinimoCobreIsolado;
+    @Column(colName = "Neutro mm²", colPosition = 11)
+    @Enumerated(EnumType.STRING)
+    private BitolasMili condutorAterramentoAco;
+    @Column(colName = "DiamEletro", colPosition = 9)
+    @Enumerated(EnumType.STRING)
     private DiametroPolegadas diametroEletroAcoGalva;
+    @Column(colName = "DiamEletroEnt", colPosition = 10)
+    @Enumerated(EnumType.STRING)
     private DiametroPolegadas diametroEletroAterramento;
+    @ElementCollection
+    @OneToOne(cascade = CascadeType.ALL)
+    private RamalLigacao ramalLigacao;
 
+    public RamalLigacao getRamalLigacao() {
+        return ramalLigacao;
+    }
+
+    public void setRamalLigacao(RamalLigacao ramalLigacao) {
+        this.ramalLigacao = ramalLigacao;
+    }
+    
+    
+
+    public BitolasMili getCondutorAterramentoAco() {
+        return condutorAterramentoAco;
+    }
+
+    public void setCondutorAterramentoAco(BitolasMili condutorAterramentoAco) {
+        this.condutorAterramentoAco = condutorAterramentoAco;
+    }
+
+    
+    
     public String getLocalizacao() {
         return localizacao;
     }
@@ -186,6 +239,19 @@ public class Concessionaria implements Serializable, Entidade<Concessionaria> {
         Concessionaria c = new Concessionaria();
         c.setId(id);
         c.setNome(nome);
+        c.setLocalizacao(localizacao);
+        c.setTensaoFN(tensaoFN);
+        c.setMetodoCalculo(metodoCalculo);
+        c.setTiposFornecimento(tiposFornecimento);
+        c.setCarga(carga);
+        c.setDisjuntorTermoMag(disjuntorTermoMag);
+        c.setTipoCondutor(tipoCondutor);
+        c.setFaseMinimaCobreIsolado(faseMinimaCobreIsolado);
+        c.setNeutroMinimoCobreIsolado(neutroMinimoCobreIsolado);
+        c.setDiametroEletroAcoGalva(diametroEletroAcoGalva);
+        c.setDiametroEletroAterramento(diametroEletroAterramento);
+        c.setRamalLigacao(ramalLigacao);
+        c.setCondutorAterramentoAco(condutorAterramentoAco);
         return c;
     }
 
@@ -193,17 +259,19 @@ public class Concessionaria implements Serializable, Entidade<Concessionaria> {
     public void apagar() {
 
         id = null;
-        //carga = 0;
-        //disjuntorTM = 0;
-        //eletroduto = "";
-        //fase = 0;
-        //fornecimento = "";
-        //local = "";
-        //metodo = "";
-        //neutro = 0;
-        //nome = "";
-        //tensaoFN = 0;
-        //terra = 0;
-
+        nome = "";
+        localizacao = "";
+        tensaoFN = 0;
+        metodoCalculo = null;
+        tiposFornecimento = null;
+        carga = null;
+        disjuntorTermoMag = null;
+        tipoCondutor = null;
+        faseMinimaCobreIsolado = null;
+        neutroMinimoCobreIsolado = null;
+        diametroEletroAcoGalva = null;
+        diametroEletroAterramento = null;
+        ramalLigacao = null;
+        condutorAterramentoAco = null;
     }
 }

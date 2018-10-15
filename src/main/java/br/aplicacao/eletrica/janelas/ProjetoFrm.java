@@ -41,6 +41,7 @@ public final class ProjetoFrm extends javax.swing.JInternalFrame {
         this.campoData.setText(DataUtil.Atual());
         this.iniciaTabelaProjetos();
         this.eventoSelecaoTabela();
+        Ids.setIdProjeto((Integer) 0);
     }
 
     /**
@@ -56,7 +57,7 @@ public final class ProjetoFrm extends javax.swing.JInternalFrame {
         btnSalvar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnCopiar = new javax.swing.JButton();
-        lblIdProjeto = new javax.swing.JLabel();
+        btnNovo = new javax.swing.JButton();
         scrollEsquerdo = new javax.swing.JScrollPane();
         painelEsquerdo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -120,31 +121,44 @@ public final class ProjetoFrm extends javax.swing.JInternalFrame {
             }
         });
 
+        btnNovo.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        btnNovo.setText("Novo");
+        btnNovo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnNovo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnNovo.setIconTextGap(2);
+        btnNovo.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        btnNovo.setMaximumSize(new java.awt.Dimension(71, 32));
+        btnNovo.setMinimumSize(new java.awt.Dimension(71, 32));
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelBotoesLayout = new javax.swing.GroupLayout(painelBotoes);
         painelBotoes.setLayout(painelBotoesLayout);
         painelBotoesLayout.setHorizontalGroup(
             painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelBotoesLayout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnExcluir)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblIdProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(481, Short.MAX_VALUE))
         );
         painelBotoesLayout.setVerticalGroup(
             painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelBotoesLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnExcluir)
-                        .addComponent(btnCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblIdProjeto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addGroup(painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExcluir)
+                    .addComponent(btnCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         scrollEsquerdo.setBorder(null);
@@ -264,7 +278,7 @@ public final class ProjetoFrm extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(scrollEsquerdo, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
                     .addComponent(painelDireito, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         setBounds(0, 0, 691, 355);
@@ -279,7 +293,7 @@ public final class ProjetoFrm extends javax.swing.JInternalFrame {
                 if (evt.getValueIsAdjusting() == true && linha > -1) {
                     Projeto projeto = (Projeto) tabelaModelo.loadItem(linha);
                     preencheFrm(projeto);
-                    Ids.idProjeto = projeto.getId();
+                    Ids.setIdProjeto(projeto.getId());
                 }
             }
         }
@@ -302,30 +316,34 @@ public final class ProjetoFrm extends javax.swing.JInternalFrame {
         ProjetoService.salva(this.getProjeto());
         this.apagaDadosFrm();
         this.iniciaTabelaProjetos();
-        Ids.idProjeto = 0;
+        Ids.setIdProjeto((Integer) 0);
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        ProjetoService.removeById(Ids.idProjeto);
+        ProjetoService.removeById(Ids.getIdProjeto());
         this.iniciaTabelaProjetos();
         this.apagaDadosFrm();
-        Ids.idProjeto = 0;
+        Ids.setIdProjeto((Integer) 0);
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnCopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarActionPerformed
-        Projeto projeto = ProjetoService.getById(Ids.idProjeto).clonarSemID();
+        Projeto projeto = ProjetoService.getById(Ids.getIdProjeto()).clonarSemID();
         ProjetoService.salva(projeto);
         for (Fonte fonte : projeto.getFontes()) {
             Fonte f = fonte.clonarSemID();
+            f.setProjeto(projeto);
             FonteService.salva(f);
             for (Quadro quadro : f.getQuadros()) {
                 Quadro q = quadro.clonarSemID();
+                q.setFonte(f);
                 QuadroService.salva(q);
                 for (Circuito circuito : q.getCircuitos()) {
                     Circuito c = circuito.clonarSemID();
+                    c.setQuadro(q);
                     CircuitoService.salva(c);
                     for (Equipamento equipamento : c.getEquipamentos()) {
                         Equipamento e = equipamento.clonarSemID();
+                        e.setCircuito(c);
                         EquipamentoService.salva(e);
                     }
                 }
@@ -333,7 +351,7 @@ public final class ProjetoFrm extends javax.swing.JInternalFrame {
         }
         this.iniciaTabelaProjetos();
         this.apagaDadosFrm();
-        Ids.idProjeto = 0;
+        Ids.setIdProjeto((Integer) 0);
     }//GEN-LAST:event_btnCopiarActionPerformed
 
     private void tabelaProjetoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaProjetoMouseClicked
@@ -341,7 +359,7 @@ public final class ProjetoFrm extends javax.swing.JInternalFrame {
 
         }
         if (evt.getClickCount() == 2) {
-            if (Ids.idProjeto > 0) {
+            if (Ids.getIdProjeto() > 0) {
                 this.setVisible(false);
                 FonteFrm frm = new FonteFrm();
                 DesktopPane.desktop.add(frm);
@@ -350,9 +368,15 @@ public final class ProjetoFrm extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_tabelaProjetoMouseClicked
 
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        this.apagaDadosFrm();
+        this.iniciaTabelaProjetos();
+        Ids.setIdProjeto((Integer) 0);
+    }//GEN-LAST:event_btnNovoActionPerformed
+
     private Projeto getProjeto() {
         Projeto projeto = new Projeto();
-        projeto.setId(TrataID.IntegerToInteger(Ids.idProjeto));
+        projeto.setId(TrataID.IntegerToInteger(Ids.getIdProjeto()));
         projeto.setNome(this.campoNome.getText());
         projeto.setAutor(this.campoAutor.getText());
         projeto.setDescricao(this.textoDescricao.getText());
@@ -365,7 +389,6 @@ public final class ProjetoFrm extends javax.swing.JInternalFrame {
         this.campoNome.setText("");
         this.textoDescricao.setText("");
         this.campoData.setText(DataUtil.Atual());
-        this.lblIdProjeto.setText("0");
     }
 
     public void preencheFrm(Projeto projeto) {
@@ -374,13 +397,13 @@ public final class ProjetoFrm extends javax.swing.JInternalFrame {
             this.campoNome.setText(projeto.getNome());
             this.textoDescricao.setText(projeto.getDescricao());
             this.campoData.setText(DataUtil.dataToString(projeto.getDataProjeto()));
-            this.lblIdProjeto.setText(Integer.toString(projeto.getId()));
         }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCopiar;
     private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JTextField campoAutor;
     private javax.swing.JTextField campoData;
@@ -390,7 +413,6 @@ public final class ProjetoFrm extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblIdProjeto;
     private javax.swing.JPanel painelBotoes;
     private javax.swing.JPanel painelDireito;
     private javax.swing.JPanel painelEsquerdo;

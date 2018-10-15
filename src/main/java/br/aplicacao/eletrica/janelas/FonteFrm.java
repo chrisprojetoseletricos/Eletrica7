@@ -22,6 +22,7 @@ import br.aplicacao.eletrica.uteis.ApenasNumero;
 import br.aplicacao.eletrica.uteis.Numero;
 import br.aplicacao.eletrica.uteis.TrataID;
 import br.aplicacao.eletrica.servico.tableModel.GenericTableModel;
+import br.aplicacao.eletrica.uteis.Lista;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public final class FonteFrm extends javax.swing.JInternalFrame {
         this.eventoSelecaoTabela();
         this.eventoDigitar();
         this.cbConcessionariaItens();
+        Ids.setIdFonte((Integer) 0);
     }
 
     /**
@@ -66,6 +68,7 @@ public final class FonteFrm extends javax.swing.JInternalFrame {
         btnExcluir = new javax.swing.JButton();
         btnCopiar = new javax.swing.JButton();
         lblIdFonte = new javax.swing.JLabel();
+        btnNovo = new javax.swing.JButton();
         scrollEsquerdo = new javax.swing.JScrollPane();
         painelEsquerdo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -87,6 +90,23 @@ public final class FonteFrm extends javax.swing.JInternalFrame {
         setResizable(true);
         setTitle("Fonte");
         setName("ProjetoFrm"); // NOI18N
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         btnSalvar.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
         btnSalvar.setText("Salvar");
@@ -128,12 +148,28 @@ public final class FonteFrm extends javax.swing.JInternalFrame {
             }
         });
 
+        btnNovo.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        btnNovo.setText("Novo");
+        btnNovo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnNovo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnNovo.setIconTextGap(2);
+        btnNovo.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        btnNovo.setMaximumSize(new java.awt.Dimension(71, 32));
+        btnNovo.setMinimumSize(new java.awt.Dimension(71, 32));
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelBotoesLayout = new javax.swing.GroupLayout(painelBotoes);
         painelBotoes.setLayout(painelBotoesLayout);
         painelBotoesLayout.setHorizontalGroup(
             painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelBotoesLayout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnExcluir)
@@ -149,11 +185,12 @@ public final class FonteFrm extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(painelBotoesLayout.createSequentialGroup()
-                        .addGap(0, 7, Short.MAX_VALUE)
+                        .addGap(0, 9, Short.MAX_VALUE)
                         .addGroup(painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnExcluir)
-                            .addComponent(btnCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(lblIdFonte, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
@@ -282,7 +319,7 @@ public final class FonteFrm extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(scrollEsquerdo, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
                     .addComponent(painelDireito, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         setBounds(0, 0, 691, 390);
@@ -297,30 +334,33 @@ public final class FonteFrm extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        FonteService.removeById(Ids.idFonte);
+        FonteService.removeById(Ids.getIdFonte());
         this.iniciaTabelaFontes();
         this.apagaDadosFrm();
-        Ids.idFonte = 0;
+        Ids.setIdFonte((Integer) 0);
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnCopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarActionPerformed
-        Fonte fonte = FonteService.getById(Ids.idFonte).clonarSemID();
+        Fonte fonte = FonteService.getById(Ids.getIdFonte()).clonarSemID();
         FonteService.salva(fonte);
         for (Quadro quadro : fonte.getQuadros()) {
             Quadro q = quadro.clonarSemID();
+            q.setFonte(fonte);
             QuadroService.salva(q);
             for (Circuito circuito : q.getCircuitos()) {
                 Circuito c = circuito.clonarSemID();
+                c.setQuadro(q);
                 CircuitoService.salva(c);
                 for (Equipamento equipamento : c.getEquipamentos()) {
                     Equipamento e = equipamento.clonarSemID();
+                    e.setCircuito(c);
                     EquipamentoService.salva(e);
                 }
             }
         }
         this.iniciaTabelaFontes();
         this.apagaDadosFrm();
-        Ids.idFonte = 0;
+        Ids.setIdFonte((Integer) 0);
     }//GEN-LAST:event_btnCopiarActionPerformed
 
     private void tabelaFonteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaFonteMouseClicked
@@ -328,21 +368,40 @@ public final class FonteFrm extends javax.swing.JInternalFrame {
 
         }
         if (evt.getClickCount() == 2) {
-            if (Ids.idFonte > 0) {
+            if (Ids.getIdFonte() > 0) {
                 this.setVisible(false);
                 QuadroFrm frm = new QuadroFrm();
                 DesktopPane.desktop.add(frm);
                 frm.setVisible(true);
                 
+
             }
         }
     }//GEN-LAST:event_tabelaFonteMouseClicked
 
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        this.apagaDadosFrm();
+        this.iniciaTabelaFontes();
+        Ids.setIdFonte((Integer) 0);
+    }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        ProjetoFrm frm = new ProjetoFrm();
+        DesktopPane.desktop.add(frm);
+        frm.setVisible(true);
+        Ids.setIdFonte((Integer) 0);
+    }//GEN-LAST:event_formInternalFrameClosing
+
     private void cbConcessionariaItens() {
-        List<Concessionaria> lista;
-        lista = ConcessionariaService.getAll();
+        List<Concessionaria> lista = ConcessionariaService.getAll();
+        List<String> nomes = new ArrayList<>();
+        for (int i = 0; i < lista.size(); i++) {
+            nomes.add(lista.get(i).getNome());
+        }
+        List<String> n = Lista.tiraRepetidos(nomes);
         cbConcessionaria.removeAllItems();
-        for (Concessionaria con : lista) {
+        cbConcessionaria.addItem(null);
+        for (String con : n) {
             cbConcessionaria.addItem(con);
         }
     }
@@ -356,7 +415,7 @@ public final class FonteFrm extends javax.swing.JInternalFrame {
                 if (evt.getValueIsAdjusting() == true && linha > -1) {
                     Fonte fonte = (Fonte) tabelaModelo.loadItem(linha);
                     setDados(fonte);
-                    Ids.idFonte = fonte.getId();
+                    Ids.setIdFonte(fonte.getId());
                 }
             }
         }
@@ -389,7 +448,7 @@ public final class FonteFrm extends javax.swing.JInternalFrame {
         List<Fonte> todos = FonteService.getAll();
         List<Fonte> lista = new ArrayList<>();
         for (Fonte f : todos) {
-            if (Objects.equals(f.getProjeto().getId(), Ids.idProjeto)) {
+            if (Objects.equals(f.getProjeto().getId(), Ids.getIdProjeto())) {
                 lista.add(f);
             }
         }
@@ -405,18 +464,17 @@ public final class FonteFrm extends javax.swing.JInternalFrame {
 
     private Fonte getDados() {
         Fonte fonte;
-        if (Ids.idFonte > 0) {
-            fonte = FonteService.getById(Ids.idFonte);
+        if (Ids.getIdFonte() > 0) {
+            fonte = FonteService.getById(Ids.getIdFonte());
         } else {
             fonte = new Fonte();
-            fonte.setProjeto(ProjetoService.getById(Ids.idProjeto));
+            fonte.setProjeto(ProjetoService.getById(Ids.getIdProjeto()));
         }
-        fonte.setId(TrataID.IntegerToInteger(Ids.idFonte));
-        fonte.setConcessionaria((Concessionaria) this.cbConcessionaria.getModel().getSelectedItem());
+        fonte.setId(TrataID.IntegerToInteger(Ids.getIdFonte()));
+        fonte.setConcessionaria((String) this.cbConcessionaria.getSelectedItem());
         fonte.setNome(this.campoNome.getText());
         fonte.setDescricao(this.textoDescricao.getText());
         fonte.setTensaoFN(Numero.stringToDouble(this.campoTensao.getText(), 0));
-        fonte.setConcessionaria((Concessionaria) cbConcessionaria.getModel().getSelectedItem());
         return fonte;
     }
 
@@ -441,10 +499,11 @@ public final class FonteFrm extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCopiar;
     private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JTextField campoNome;
     private javax.swing.JTextField campoTensao;
-    private javax.swing.JComboBox<Concessionaria> cbConcessionaria;
+    private javax.swing.JComboBox<String> cbConcessionaria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

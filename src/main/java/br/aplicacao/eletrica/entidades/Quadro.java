@@ -49,15 +49,14 @@ public class Quadro implements Serializable, Entidade<Quadro> {
     @OneToMany(mappedBy = "quadro", targetEntity = Circuito.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Circuito> circuitos = new ArrayList<Circuito>();
     @OneToOne(cascade = CascadeType.ALL)
-    @Column(colName = "Condutor", colPosition = 2)
     private Condutor condutor;
     @OneToOne(cascade = CascadeType.ALL)
-    @Column(colName = "Dados CC", colPosition = 3)
     private Curto curto;
     @Enumerated(EnumType.STRING)
     private UsoDr usoDeDR;
     private double fd;
     private double fp;
+    private double fSimu;
     @Column(colName = "Local", colPosition = 1)
     private String localizacao;
     @Column(colName = "Nome", colPosition = 0)
@@ -78,7 +77,7 @@ public class Quadro implements Serializable, Entidade<Quadro> {
 
         for (Circuito c : this.getCircuitos()) {
             for (Equipamento e : c.getEquipamentos()) {
-                total += e.getQuantidade() * e.getDemanda(unidadeDestino) * e.getfSimu();
+                total += e.getQuantidade() * e.getDemanda(unidadeDestino) * fSimu;
             }
         }
 
@@ -98,6 +97,16 @@ public class Quadro implements Serializable, Entidade<Quadro> {
                 .valor();
     }
 
+    public double getfSimu() {
+        return fSimu;
+    }
+
+    public void setfSimu(double fSimu) {
+        this.fSimu = fSimu;
+    }
+
+    
+    
     public List<Integer> getListaQuadros() {
         return listaQuadros;
     }
@@ -276,6 +285,7 @@ public class Quadro implements Serializable, Entidade<Quadro> {
         q.setUsoDeDR(usoDeDR);
         q.setInstalacao(instalacao);
         q.setTempAmbiente(tempAmbiente);
+        q.setfSimu(fSimu);
         q.setQuadroPai(quadroPai);
         for (Circuito c : circuitos) {
             q.circuitos.add(c);
@@ -298,6 +308,7 @@ public class Quadro implements Serializable, Entidade<Quadro> {
         nome = "";
         pot100PercDem = 0;
         usabilidade = null;
+        fSimu = 0;
         quadroPai = 0;
     }
 

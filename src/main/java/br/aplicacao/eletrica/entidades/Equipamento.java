@@ -55,7 +55,6 @@ public class Equipamento implements Serializable, Entidade<Equipamento> {
     private double fd;
     private double fp;
     private double fs;
-    private double fSimu;
     private double fu;
     @Enumerated(EnumType.STRING)
     private UnidadePotencia unidade;
@@ -216,14 +215,6 @@ public class Equipamento implements Serializable, Entidade<Equipamento> {
         this.fs = fs;
     }
 
-    public double getfSimu() {
-        return fSimu;
-    }
-
-    public void setfSimu(double fSimu) {
-        this.fSimu = fSimu;
-    }
-
     public double getFu() {
         return fu;
     }
@@ -296,8 +287,6 @@ public class Equipamento implements Serializable, Entidade<Equipamento> {
         e.setDescricao(descricao);
         e.setFd(fd);
         e.setFp(fp);
-        e.setFs(fSimu);
-        e.setfSimu(fSimu);
         e.setFu(fu);
         e.setLigacao(ligacao);
         e.setLigacaoReal(ligacaoReal);
@@ -330,7 +319,6 @@ public class Equipamento implements Serializable, Entidade<Equipamento> {
         fd = 0;
         fp = 0;
         fs = 0;
-        fSimu = 0;
         fu = 0;
         unidade = null;
         usabilidade = null;

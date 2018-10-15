@@ -1,14 +1,11 @@
 package conexao;
 
-import br.aplicacao.eletrica.entidades.Fonte;
-import br.aplicacao.eletrica.servico.FonteService;
+import br.aplicacao.eletrica.servico.CircuitoService;
 
 public class testeconexao6 {
 
     public static void main(String[] args) {
 
-        Fonte fonte = FonteService.getById(4);
-        FonteService.remove(fonte);
+        CircuitoService.removeById(2);
     }
-
 }

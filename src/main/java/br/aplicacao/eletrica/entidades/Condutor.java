@@ -182,7 +182,7 @@ public class Condutor implements Serializable, Entidade<Condutor> {
 
     @Override
     public String toString() {
-        return "br.aplicacao.eletrica.entidades.Condutor[ id=" + id + " ]";
+        return "id="+id;
     }
 
     @Override

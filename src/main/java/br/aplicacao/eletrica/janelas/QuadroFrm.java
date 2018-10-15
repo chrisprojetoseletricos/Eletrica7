@@ -37,6 +37,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener {
 
+    private static final long serialVersionUID = 1L;
+
     private GenericTableModel tabelaModelo;
     private CondutorFrm condutorFrm;
     private CurtoCircuitoFrm curtoFrm;
@@ -54,6 +56,7 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
         this.cbTemperaturaAmbienteItens();
         this.cbInstalacaoItens();
         this.cbUsoDeDRItens();
+        Ids.setIdQuadro((Integer) 0);
     }
 
     /**
@@ -70,6 +73,7 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
         btnExcluir = new javax.swing.JButton();
         btnCopiar = new javax.swing.JButton();
         lblIdQuadro = new javax.swing.JLabel();
+        btnNovo = new javax.swing.JButton();
         scrollEsquerdo = new javax.swing.JScrollPane();
         painelEsquerdo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -92,6 +96,8 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
         cbInstalacao = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
         campoPot100Demanda = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        campoFatorSimutaniedade = new javax.swing.JTextField();
         painelDireito = new javax.swing.JPanel();
         scrollDireito = new javax.swing.JScrollPane();
         tabelaQuadro = new javax.swing.JTable();
@@ -102,6 +108,23 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
         setResizable(true);
         setTitle("Quadro");
         setName("ProjetoFrm"); // NOI18N
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         btnSalvar.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
         btnSalvar.setText("Salvar");
@@ -143,12 +166,28 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
             }
         });
 
+        btnNovo.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        btnNovo.setText("Novo");
+        btnNovo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnNovo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnNovo.setIconTextGap(2);
+        btnNovo.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        btnNovo.setMaximumSize(new java.awt.Dimension(71, 32));
+        btnNovo.setMinimumSize(new java.awt.Dimension(71, 32));
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelBotoesLayout = new javax.swing.GroupLayout(painelBotoes);
         painelBotoes.setLayout(painelBotoesLayout);
         painelBotoesLayout.setHorizontalGroup(
             painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelBotoesLayout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnExcluir)
@@ -161,12 +200,13 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
         painelBotoesLayout.setVerticalGroup(
             painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelBotoesLayout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addGroup(painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnExcluir)
-                        .addComponent(btnCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnCopiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblIdQuadro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
@@ -204,6 +244,10 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
 
         campoPot100Demanda.setName("campoPot100Demanda"); // NOI18N
 
+        jLabel12.setText("Fator de simutâniedade:");
+
+        campoFatorSimutaniedade.setName("campoFatorDemanda"); // NOI18N
+
         javax.swing.GroupLayout painelEsquerdoLayout = new javax.swing.GroupLayout(painelEsquerdo);
         painelEsquerdo.setLayout(painelEsquerdoLayout);
         painelEsquerdoLayout.setHorizontalGroup(
@@ -213,10 +257,18 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
                     .addGroup(painelEsquerdoLayout.createSequentialGroup()
                         .addGap(159, 159, 159)
                         .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(campoNome, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                            .addComponent(campoNome)
                             .addComponent(campoLocal)
                             .addComponent(campoFatorPotencia)
                             .addComponent(campoFatorDemanda)))
+                    .addGroup(painelEsquerdoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(painelEsquerdoLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,7 +280,7 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cbQuadroPai, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cbUsoDeDR, 0, 321, Short.MAX_VALUE)
+                                    .addComponent(cbUsoDeDR, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cbUsabilidade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(painelEsquerdoLayout.createSequentialGroup()
                                 .addComponent(jLabel9)
@@ -237,17 +289,15 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
                             .addGroup(painelEsquerdoLayout.createSequentialGroup()
                                 .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbInstalacao, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(painelEsquerdoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel11))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(campoPot100Demanda, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(cbInstalacao, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(painelEsquerdoLayout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                                .addComponent(campoPot100Demanda, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(painelEsquerdoLayout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(campoFatorSimutaniedade, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         painelEsquerdoLayout.setVerticalGroup(
@@ -269,6 +319,10 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
                 .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(campoFatorDemanda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(campoFatorSimutaniedade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
@@ -293,7 +347,7 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
                 .addGroup(painelEsquerdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(cbInstalacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(197, Short.MAX_VALUE))
+                .addContainerGap(172, Short.MAX_VALUE))
         );
 
         scrollEsquerdo.setViewportView(painelEsquerdo);
@@ -359,16 +413,16 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         Quadro quadro = this.getDados();
-            condutorFrm = new CondutorFrm(null,true);
-            curtoFrm = new CurtoCircuitoFrm(null,true);
-            //DesktopPane.desktop.add(condutorFrm);
-            try {
-                condutorFrm.setDados(QuadroService.getById(Ids.idQuadro).getCondutor());
-                curtoFrm.setDados(QuadroService.getById(Ids.idQuadro).getCurto());
-            } catch (Exception e) {
-            }
-            condutorFrm.setVisible(true);
-            curtoFrm.setVisible(true);
+        condutorFrm = new CondutorFrm(null, true);
+        curtoFrm = new CurtoCircuitoFrm(null, true);
+        //DesktopPane.desktop.add(condutorFrm);
+        try {
+            condutorFrm.setDados(QuadroService.getById(Ids.getIdQuadro()).getCondutor());
+            curtoFrm.setDados(QuadroService.getById(Ids.getIdQuadro()).getCurto());
+        } catch (Exception e) {
+        }
+        condutorFrm.setVisible(true);
+        curtoFrm.setVisible(true);
         try {
             quadro.setCondutor(condutorFrm.getCondutor());
             quadro.setCurto(curtoFrm.getCurto());
@@ -379,39 +433,40 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
 
         this.apagaDadosFrm();
         this.iniciaTabelaQuadros();
-       // Ids.idQuadro = 0;
-        Ids.idCondutor = 0;
-        Ids.idCurto = 0;
+        // Ids.idQuadro = 0;
+        Ids.setIdCondutor((Integer) 0);
+        Ids.setIdCurto((Integer) 0);
 
     }//GEN-LAST:event_btnSalvarActionPerformed
 
 
-    
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        QuadroService.removeById(Ids.idQuadro);
+        QuadroService.removeById(Ids.getIdQuadro());
         this.iniciaTabelaQuadros();
         this.apagaDadosFrm();
-        Ids.idQuadro = 0;
-        Ids.idCondutor = 0;
-        Ids.idCurto = 0;
+        Ids.setIdQuadro((Integer) 0);
+        Ids.setIdCondutor((Integer) 0);
+        Ids.setIdCurto((Integer) 0);
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnCopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarActionPerformed
-        Quadro q = QuadroService.getById(Ids.idQuadro).clonarSemID();
+        Quadro q = QuadroService.getById(Ids.getIdQuadro()).clonarSemID();
         QuadroService.salva(q);
         for (Circuito circuito : q.getCircuitos()) {
             Circuito c = circuito.clonarSemID();
+            c.setQuadro(q);
             CircuitoService.salva(c);
             for (Equipamento equipamento : c.getEquipamentos()) {
                 Equipamento e = equipamento.clonarSemID();
+                e.setCircuito(c);
                 EquipamentoService.salva(e);
             }
         }
         this.iniciaTabelaQuadros();
         this.apagaDadosFrm();
-        Ids.idQuadro = 0;
-        Ids.idCondutor = 0;
-        Ids.idCurto = 0;
+        Ids.setIdQuadro((Integer) 0);
+        Ids.setIdCondutor((Integer) 0);
+        Ids.setIdCurto((Integer) 0);
     }//GEN-LAST:event_btnCopiarActionPerformed
 
     private void tabelaQuadroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaQuadroMouseClicked
@@ -419,16 +474,31 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
 
         }
         if (evt.getClickCount() == 2) {
-            if (Ids.idQuadro > 0) {
+            if (Ids.getIdQuadro() > 0) {
                 this.setVisible(false);
                 CircuitoFrm circuito = new CircuitoFrm();
                 DesktopPane.desktop.add(circuito);
                 circuito.setVisible(true);
-                Ids.idCondutor = 0;
-                Ids.idCurto = 0;
+                Ids.setIdCondutor((Integer) 0);
+                Ids.setIdCurto((Integer) 0);
             }
         }
     }//GEN-LAST:event_tabelaQuadroMouseClicked
+
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        this.apagaDadosFrm();
+        this.iniciaTabelaQuadros();
+        Ids.setIdQuadro((Integer) 0);
+        Ids.setIdCondutor((Integer) 0);
+        Ids.setIdCurto((Integer) 0);
+    }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        FonteFrm frm = new FonteFrm();
+        DesktopPane.desktop.add(frm);
+        frm.setVisible(true);
+        Ids.setIdQuadro((Integer) 0);
+    }//GEN-LAST:event_formInternalFrameClosing
 
     private void cbUsabilidadeItens() {
         cbUsabilidade.removeAllItems();
@@ -479,10 +549,10 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
                 if (evt.getValueIsAdjusting() == true && linha > -1) {
                     Quadro quadro = (Quadro) tabelaModelo.loadItem(linha);
                     setDados(quadro);
-                    Ids.idQuadro = quadro.getId();
+                    Ids.setIdQuadro(quadro.getId());
                     try {
-                        Ids.idCondutor = quadro.getCondutor().getId();
-                        Ids.idCurto = quadro.getCurto().getId();
+                        Ids.setIdCondutor(quadro.getCondutor().getId());
+                        Ids.setIdCurto(quadro.getCurto().getId());
                     } catch (Exception e) {
                     }
                 }
@@ -495,6 +565,7 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
         this.campoFatorDemanda.addKeyListener(this);
         this.campoFatorPotencia.addKeyListener(this);
         this.campoPot100Demanda.addKeyListener(this);
+        this.campoFatorSimutaniedade.addKeyListener(this);
     }
 
     public void iniciaTabelaQuadros() {
@@ -503,7 +574,7 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
         List<Quadro> todos = QuadroService.getAll();
         List<Quadro> lista = new ArrayList<>();
         for (Quadro q : todos) {
-            if (Objects.equals(q.getFonte().getId(), Ids.idFonte)) {
+            if (Objects.equals(q.getFonte().getId(), Ids.getIdFonte())) {
                 lista.add(q);
             }
         }
@@ -519,13 +590,13 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
 
     private Quadro getDados() {
         Quadro quadro;
-        if (Ids.idQuadro > 0) {
-            quadro = QuadroService.getById(TrataID.IntegerToInteger(Ids.idQuadro));
+        if (Ids.getIdQuadro() > 0) {
+            quadro = QuadroService.getById(TrataID.IntegerToInteger(Ids.getIdQuadro()));
         } else {
             quadro = new Quadro();
-            quadro.setFonte(FonteService.getById(TrataID.IntegerToInteger(Ids.idFonte)));
+            quadro.setFonte(FonteService.getById(TrataID.IntegerToInteger(Ids.getIdFonte())));
         }
-        quadro.setId(TrataID.IntegerToInteger(Ids.idQuadro));
+        quadro.setId(TrataID.IntegerToInteger(Ids.getIdQuadro()));
         quadro.setNome(this.campoNome.getText());
         quadro.setFd(Numero.stringToDouble(this.campoFatorDemanda.getText(), 1));
         quadro.setFp(Numero.stringToDouble(this.campoFatorPotencia.getText(), 1));
@@ -535,6 +606,7 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
         quadro.setUsoDeDR((UsoDr) cbUsoDeDR.getModel().getSelectedItem());
         quadro.setTempAmbiente((TempAmbiente) cbTemperaturaAmbiente.getModel().getSelectedItem());
         quadro.setInstalacao((Instalacao) cbInstalacao.getModel().getSelectedItem());
+        quadro.setfSimu(Numero.stringToDouble(this.campoFatorSimutaniedade.getText(), 1));
 
         try {
             quadro.setQuadroPai(((Quadro) cbQuadroPai.getModel().getSelectedItem()).getId());
@@ -557,12 +629,13 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
         this.cbUsoDeDR.setSelectedIndex(-1);
         this.cbTemperaturaAmbiente.setSelectedIndex(-1);
         this.cbInstalacao.setSelectedIndex(-1);
+        this.campoFatorSimutaniedade.setText("");
     }
 
     public void setDados(Quadro quadro) {
         if (quadro != null) {
-            Ids.idQuadro = quadro.getId();
-            this.lblIdQuadro.setText(Ids.idQuadro.toString());
+            Ids.setIdQuadro(quadro.getId());
+            this.lblIdQuadro.setText(Ids.getIdQuadro().toString());
             this.campoNome.setText(quadro.getNome());
             this.campoFatorDemanda.setText(Numero.decimal(quadro.getFd(), "##.##"));
             this.campoFatorPotencia.setText(Numero.decimal(quadro.getFp(), "##.##"));
@@ -572,6 +645,7 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
             this.cbUsoDeDR.getModel().setSelectedItem(quadro.getUsoDeDR());
             this.cbTemperaturaAmbiente.getModel().setSelectedItem(quadro.getTempAmbiente());
             this.cbInstalacao.getModel().setSelectedItem(quadro.getInstalacao());
+            this.campoFatorSimutaniedade.setText(Numero.decimal(quadro.getfSimu(),"##.##"));
             try {
                 this.cbQuadroPai.getModel().setSelectedItem(QuadroService.getById(quadro.getQuadroPai()));
             } catch (Exception e) {
@@ -583,9 +657,11 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCopiar;
     private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JTextField campoFatorDemanda;
     private javax.swing.JTextField campoFatorPotencia;
+    private javax.swing.JTextField campoFatorSimutaniedade;
     private javax.swing.JTextField campoLocal;
     private javax.swing.JTextField campoNome;
     private javax.swing.JTextField campoPot100Demanda;
@@ -597,6 +673,7 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
@@ -618,6 +695,7 @@ public class QuadroFrm extends javax.swing.JInternalFrame implements KeyListener
         ApenasNumero.campo(e, "campoPot100Demanda");
         ApenasNumero.campo(e, "campoFatorPotencia");
         ApenasNumero.campo(e, "campoFatorDemanda");
+        ApenasNumero.campo(e, "campoFatorSimutaniedade");
     }
 
     @Override

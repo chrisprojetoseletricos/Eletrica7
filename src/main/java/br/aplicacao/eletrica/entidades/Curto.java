@@ -93,7 +93,7 @@ public class Curto implements Serializable, Entidade<Curto> {
 
     @Override
     public String toString() {
-        return "br.aplicacao.eletrica.entidades.Curto[ id=" + id + " ]";
+        return "id="+id;
     }
 
     @Override

@@ -38,9 +38,8 @@ public class Fonte implements Serializable, Entidade<Fonte> {
     private Integer id;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private Projeto projeto;
-    @OneToOne()
     @Column(colName = "Concessionária", colPosition = 2)
-    private Concessionaria concessionaria;
+    private String concessionaria;
     @OneToMany(mappedBy = "fonte", targetEntity = Quadro.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Quadro> quadros = new ArrayList<>();
     @Column(colName = "Nome", colPosition = 0)
@@ -75,11 +74,11 @@ public class Fonte implements Serializable, Entidade<Fonte> {
         this.descricao = descricao;
     }
 
-    public Concessionaria getConcessionaria() {
+    public String getConcessionaria() {
         return concessionaria;
     }
 
-    public void setConcessionaria(Concessionaria concessionaria) {
+    public void setConcessionaria(String concessionaria) {
         this.concessionaria = concessionaria;
     }
 
@@ -174,7 +173,7 @@ public class Fonte implements Serializable, Entidade<Fonte> {
     public void apagar() {
 
         id = 0;
-        concessionaria = null;
+        concessionaria = "";
         quadros.clear();
         nome = "";
         tensaoFN = 0;
